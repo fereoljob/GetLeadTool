@@ -5,10 +5,12 @@ import java.util.Map;
 
 public class Command {
 		private String name;
+		private String infos;
 		private Map<String, CommandParameter> parameters;
 
-	    public Command(String name) {
+	    public Command(String name,String infos) {
 	        this.name = name;
+	        this.infos = name +" : " +  infos;
 	        this.parameters = new HashMap<>();
 	    }
 
@@ -22,6 +24,10 @@ public class Command {
 	    
 	    public String getName() {
 	    	return this.name;
+	    }
+	    
+	    public String getInfos() {
+	    	return this.infos;
 	    }
 	    
 	    @Override
