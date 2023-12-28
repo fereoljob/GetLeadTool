@@ -1,13 +1,17 @@
 package tools;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -70,22 +74,21 @@ public class QueryHandler {
 	private void restQuery(Command currentCommand) {
 		
 		try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-			HttpPost httpPost = new HttpPost("http://localhost:8080/myTest/commandGate");
- 			httpPost.setHeader("Content-Type", "application/json");
-
- 			ObjectMapper objectMapper = new ObjectMapper();
- 	        String json = objectMapper.writeValueAsString(currentCommand.toMap());
- 			
- 			
-	            
- 	        StringEntity requestEntity = new StringEntity(json);
- 	        httpPost.setEntity(requestEntity);
- 	       try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+			URIBuilder builder = new URIBuilder("http://localhost:8080/virtualcrm/"+currentCommand.getName());
+	        // Ajoutez ici les paramètres à l'URL
+	        for (Map.Entry<String, Object> entry : currentCommand.toMap().entrySet()) {
+	            builder.setParameter(entry.getKey(), entry.getValue().toString());
+	        }
+	        URI uri = builder.build();
+	        HttpGet httpGet = new HttpGet(uri);
+	        httpGet.setHeader("Content-Type", "application/json");
+ 	       try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
  	    	    HttpEntity responseEntity = response.getEntity();
  	    	    
  	    	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 
- 	    	         objectMapper = new ObjectMapper();
+ 	                ObjectMapper objectMapper = new ObjectMapper();
+
  	    	        List<VirtualLeadDTO> leadDTOs = objectMapper.readValue(responseEntity.getContent(), new TypeReference<List<VirtualLeadDTO>>() {});
  	    	        if(leadDTOs == null) {
  	    	        	System.out.println("No Result found");
@@ -103,7 +106,7 @@ public class QueryHandler {
  	    	} catch (Exception e) {
  	    	    e.printStackTrace();
  	    	}
-		} catch (IOException e1) {
+		} catch (IOException | URISyntaxException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
