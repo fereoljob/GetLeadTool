@@ -26,9 +26,7 @@ public class VirtualLeadDTO {
     
     @Override
 	public String toString() {
-	    return "ModelTO{" +
-	            "_firstName='" + firstName + '\'' +
-	            ", _lastName='" + lastName + '\'' +
+	    return firstName + " " +lastName + "{" +
 	            ", _annualRevenue=" + annualRevenue +
 	            ", _phone='" + phone + '\'' +
 	            ", _street='" + street + '\'' +

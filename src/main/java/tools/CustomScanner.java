@@ -12,13 +12,13 @@ public class CustomScanner {
     public Object scanType(ScanType t) {
         switch (t) {
             case STRING:
-                return scanner.next();
+                return scanner.nextLine();
             case INT:
-                return scanner.nextInt();
+                return Integer.parseInt(scanner.nextLine());
             case DOUBLE:
-                return scanner.nextDouble();
+                return Double.parseDouble(scanner.nextLine());
             case BOOLEAN:
-                return scanner.nextBoolean();
+                return Boolean.parseBoolean(scanner.nextLine());
             // Add more cases for additional types as needed
             default:
                 throw new IllegalArgumentException("Unsupported ScanType: " + t);

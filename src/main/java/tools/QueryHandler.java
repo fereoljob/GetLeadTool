@@ -94,9 +94,12 @@ public class QueryHandler {
  	    	        	System.out.println("No Result found");
  	    	        }
  	    	        else {
+ 	    	        	System.out.println("Résultats:");
  	    	        	for (VirtualLeadDTO dto : leadDTOs) {
  	 	    	            System.out.println(dto.toString());
  	 	    	        }
+ 	    	        	System.out.println("");
+
  	    	        }
  	    	        
  	    	    } else {
